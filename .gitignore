@@ -1,0 +1,30 @@
+# Environment
+venv/
+.idea/
+*/vscode/
+**/__pycache__/
+
+# Jupyter Notebook
+**/.ipynb_checkpoints/
+
+# Tests and code coverage
+_test_*.py
+.coverage
+.pytest_cache/
+cov_reports/
+
+# Sphinx documentation
+docs/build/doctrees
+docs/build/html
+docs/build/latex/*
+!docs/build/latex/smart_home_product_reviews_analysis.pdf
+docs/source/
+docs/make.bat
+docs/Makefile
+
+# Project-specific
+.credentials
+*[!_]_.py
+data/*
+files/*
+cmd.md
