@@ -15,7 +15,7 @@ import zipfile
 import contractions
 import natsort
 import numpy as np
-from pyhelpers._cache import _check_dependency
+from pyhelpers._cache import _check_dependency, _print_failure_msg
 from pyhelpers.dirs import cd, cdd
 from pyhelpers.settings import mpl_preferences
 from pyhelpers.store import load_data, save_data, xlsx_to_csv
@@ -2036,15 +2036,13 @@ class _Reviews:
 
             >>> from src.processor import RoboticVacuumCleaners, TraditionalVacuumCleaners
 
-        *Reviews on the robot vacuum cleaners*:
+        *Reviews on the robot vacuum cleaners*::
 
             >>> rvc = RoboticVacuumCleaners(load_prep_data=True, load_preprocd_data=False)
-
             >>> rvc.determine_sentiment(review_column_name='ReviewText', verbose=True)
             Determining sentiment on rating ... Done.
             Calculating VADER sentiment scores ... Done.
             Determining sentiment on VADER sentiment score ... Done.
-
             >>> rvc.preprocd_data[['sentiment_on_rating', 'sentiment_on_vs_score']].head()
               sentiment_on_rating sentiment_on_vs_score
             0            negative              negative
@@ -2052,15 +2050,12 @@ class _Reviews:
             2            positive              positive
             3            positive              positive
             4            positive              positive
-
             >>> rvc.preprocd_data.shape
             (143217, 18)
-
             >>> rvc.preprocd_data_ is None
             True
-
-            >>> rvc.determine_sentiment(dual_scale=True, review_column_name='ReviewText',
-            ...                         verbose=True)
+            >>> rvc.determine_sentiment(
+            ...     dual_scale=True, review_column_name='ReviewText', verbose=True)
             Sentiment on rating is available.
             Sentiment on VADER sentiment score is available.
             Determining sentiment on both rating and VADER sentiment score ... Done.
@@ -2076,12 +2071,10 @@ class _Reviews:
         *Reviews on the traditional vacuum cleaners*::
 
             >>> tvc = TraditionalVacuumCleaners(load_prep_data=True, load_preprocd_data=False)
-
             >>> tvc.determine_sentiment(review_column_name='ReviewText', verbose=True)
             Determining sentiment on rating ... Done.
             Calculating VADER sentiment scores ... Done.
             Determining sentiment on VADER sentiment score ... Done.
-
             >>> tvc.preprocd_data[['sentiment_on_rating', 'sentiment_on_vs_score']].head()
               sentiment_on_rating sentiment_on_vs_score
             0            positive              positive
@@ -2089,13 +2082,10 @@ class _Reviews:
             2            negative              negative
             3            positive              positive
             4            positive              positive
-
             >>> tvc.preprocd_data.shape
             (230479, 18)
-
             >>> tvc.preprocd_data_ is None
             True
-
             >>> tvc.determine_sentiment(dual_scale=True, review_column_name='ReviewText',
             ...                         verbose=True)
             Sentiment on rating is available.
@@ -2109,6 +2099,39 @@ class _Reviews:
             29422
             >>> (tvc.preprocd_data_.sentiment_on_dual_scale == 'neutral').sum()
             1573
+
+        *Reviews on the smart thermostats*::
+
+            >>> from src.processor import SmartThermostats
+            >>> smt = SmartThermostats(load_prep_data=True, load_preprocd_data=False)
+            >>> smt.determine_sentiment(review_column_name='ReviewText', verbose=True)
+            Determining sentiment on rating ... Done.
+            Calculating VADER sentiment scores ... Done.
+            Determining sentiment on VADER sentiment score ... Done.
+            >>> smt.preprocd_data[['sentiment_on_rating', 'sentiment_on_vs_score']].head()
+              sentiment_on_rating sentiment_on_vs_score
+            0            positive              positive
+            1            negative              negative
+            2            negative              positive
+            3            negative              positive
+            4            positive              positive
+            >>> smt.preprocd_data.shape
+            (50835, 18)
+            >>> smt.preprocd_data_ is None
+            True
+            >>> smt.determine_sentiment(dual_scale=True, review_column_name='ReviewText',
+            ...                         verbose=True)
+            Sentiment on rating is available.
+            Sentiment on VADER sentiment score is available.
+            Determining sentiment on both rating and VADER sentiment score ... Done.
+            >>> smt.preprocd_data_.shape
+            (39709, 17)
+            >>> (smt.preprocd_data_.sentiment_on_dual_scale == 'positive').sum()
+            34569
+            >>> (smt.preprocd_data_.sentiment_on_dual_scale == 'negative').sum()
+            4880
+            >>> (smt.preprocd_data_.sentiment_on_dual_scale == 'neutral').sum()
+            260
         """
 
         self._check_preprocd_data(refresh=refresh, verbose=verbose)
@@ -2120,6 +2143,7 @@ class _Reviews:
             try:  # Based on rating
                 self._sentiment_on_rating(verbose=verbose)
             except Exception as e:
+
                 print("Failed. {}".format(e))
         else:
             if verbose:
@@ -2129,7 +2153,7 @@ class _Reviews:
             try:  # Based on VADER sentiment score
                 self._sentiment_on_vs_score(review_column_name=review_column_name, verbose=verbose)
             except Exception as e:
-                print("Failed. {}".format(e))
+                _print_failure_msg(e, msg="Failed.")
         else:
             if verbose:
                 print("Sentiment on VADER sentiment score is available.")
@@ -2160,7 +2184,7 @@ class _Reviews:
                         print("Done.")
 
                 except Exception as e:
-                    print("Failed. {}".format(e))
+                    _print_failure_msg(e, msg="Failed.")
 
     @classmethod
     def _preprocess_review_text(cls, review_text, func, verbose, msg, processes=None, **kwargs):
@@ -2419,6 +2443,10 @@ class _Reviews:
             >>> rvc.load_preprocd_data(dual_scale=True, verbose=True)
             >>> rvc.preprocd_data.shape  # dual_scale=True
             (77775, 18)
+            >>> (rvc.preprocd_data.sentiment_on_dual_scale == 'positive').sum()
+            64836
+            >>> (rvc.preprocd_data.sentiment_on_dual_scale == 'negative').sum()
+            12587
             >>> rvc.preprocd_data_.shape  # dual_scale=False
             (101608, 19)
 
@@ -2437,8 +2465,35 @@ class _Reviews:
             >>> tvc.load_preprocd_data(dual_scale=True, verbose=True)
             >>> tvc.preprocd_data.shape  # dual_scale=True
             (110978, 18)
+            >>> (tvc.preprocd_data.sentiment_on_dual_scale == 'positive').sum()
+            89384
+            >>> (tvc.preprocd_data.sentiment_on_dual_scale == 'negative').sum()
+            21109
             >>> tvc.preprocd_data_.shape  # dual_scale=False
             (146656, 19)
+
+            >>> from src.processor import SmartThermostats
+            >>> smt = SmartThermostats(load_preprocd_data=False)
+            >>> # smt.load_preprocd_data(update=True, verbose=True)  # Update preprocd_data
+            >>> smt.load_preprocd_data(verified_reviews_only=False, verbose=True)
+            >>> smt.preprocd_data.shape
+            (46317, 19)
+            >>> smt.preprocd_data_ is None
+            True
+            >>> smt.load_preprocd_data(verified_reviews_only=True, verbose=True)
+            >>> smt.preprocd_data.shape
+            (38810, 19)
+            >>> smt.preprocd_data_ is None
+            True
+            >>> smt.load_preprocd_data(dual_scale=True, verbose=True)
+            >>> smt.preprocd_data.shape  # dual_scale=True
+            (36254, 18)
+            >>> (smt.preprocd_data.sentiment_on_dual_scale == 'positive').sum()
+            34569
+            >>> (smt.preprocd_data.sentiment_on_dual_scale == 'negative').sum()
+            4880
+            >>> smt.preprocd_data_.shape  # dual_scale=False
+            (46317, 19)
         """
 
         if verified_reviews_only != self.verified_reviews_only:
