@@ -714,6 +714,13 @@ class LatentDirichletAllocation(_Base):
         :return: Data of original review texts.
         :rtype: pandas.DataFrame
 
+        .. _`gensim.corpora.Dictionary.doc2bow()`:
+            https://radimrehurek.com/gensim/corpora/dictionary.html#
+            gensim.corpora.dictionary.Dictionary.doc2bow
+        .. _`gensim.corpora.Dictionary()`:
+            https://radimrehurek.com/gensim/corpora/dictionary.html#
+            gensim.corpora.dictionary.Dictionary
+
         **Examples**::
 
             >>> from src.modeller import LatentDirichletAllocation
@@ -867,7 +874,8 @@ class LatentDirichletAllocation(_Base):
             https://radimrehurek.com/gensim/corpora/dictionary.html#
             gensim.corpora.dictionary.Dictionary.doc2bow
         .. _`gensim.corpora.Dictionary()`:
-            https://radimrehurek.com/gensim/corpora/dictionary.html#gensim.corpora.dictionary.Dictionary
+            https://radimrehurek.com/gensim/corpora/dictionary.html#
+            gensim.corpora.dictionary.Dictionary
         .. _`gensim.models.LdaMulticore()`:
             https://radimrehurek.com/gensim/models/ldamulticore.html#
             gensim.models.ldamulticore.LdaMulticore
