@@ -22,7 +22,7 @@ __license__ = metadata['License']
 __kickoff__ = metadata['Project Start']
 
 __all__ = [
-    'processor', 'modeller',
+    'processor', 'modeller', 'analyser',
     'RoboticVacuumCleaners', 'TraditionalVacuumCleaners', 'SmartThermostats',
     'LogisticRegressionModel', 'LatentDirichletAllocation',
 ]

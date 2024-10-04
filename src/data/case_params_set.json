@@ -1,0 +1,44 @@
+{
+    "case1": {
+        "product_category": "vacuum",
+        "product_type": "robotic",
+        "random_state": 0,
+        "sentiment": "positive",
+        "best_lda_index": 76
+    },
+    "case2": {
+        "product_category": "vacuum",
+        "product_type": "robotic",
+        "random_state": 0,
+        "sentiment": "negative",
+        "best_lda_index": 0
+    },
+    "case3": {
+        "product_category": "vacuum",
+        "product_type": "traditional",
+        "random_state": 0,
+        "sentiment": "positive",
+        "best_lda_index": 9
+    },
+    "case4": {
+        "product_category": "vacuum",
+        "product_type": "traditional",
+        "random_state": 0,
+        "sentiment": "negative",
+        "best_lda_index": 49
+    },
+    "case5": {
+        "product_category": "thermostats",
+        "product_type": "smart",
+        "random_state": 0,
+        "sentiment": "positive",
+        "best_lda_index": 19
+    },
+    "case6": {
+        "product_category": "thermostats",
+        "product_type": "smart",
+        "random_state": 0,
+        "sentiment": "negative",
+        "best_lda_index": 9
+    }
+}
