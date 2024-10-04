@@ -14,13 +14,13 @@ _test_*.py
 cov_reports/
 
 # Sphinx documentation
-docs/build/doctrees
-docs/build/html
-docs/build/latex/*
-!docs/build/latex/smart_home_product_reviews_analysis.pdf
-docs/source/
-docs/make.bat
-docs/Makefile
+*/source/
+make.bat
+Makefile
+**/doctrees
+**/html/
+**/latex/*
+!**/smart_home_product_reviews_analysis.pdf
 
 # Project-specific
 .credentials
