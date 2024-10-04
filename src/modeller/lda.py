@@ -9,6 +9,7 @@ import datetime
 import functools
 import gc
 import itertools
+import operator
 import os
 import pickle
 import shutil
@@ -29,6 +30,7 @@ from pyhelpers.dirs import cd
 from pyhelpers.ops import confirmed
 from pyhelpers.settings import mpl_preferences
 from pyhelpers.store import _check_saving_path, load_data, save_data, save_spreadsheets
+from vaderSentiment import vaderSentiment
 
 from src._cache import MOSES_TOKENIZER
 from src.modeller._base import _Base
@@ -305,7 +307,16 @@ class LatentDirichletAllocation(_Base):
             >>> isinstance(neg_tokenized_docs, list)
             True
             >>> # Traditional vacuum cleaners
-            >>> lda = LatentDirichletAllocation('traditional')
+            >>> lda = LatentDirichletAllocation('vacuum', product_type='traditional')
+            >>> example_docs = lda.data['review_text']
+            >>> pos_tokenized_docs = lda.get_tokenized_docs(example_docs, sentiment='positive')
+            >>> isinstance(pos_tokenized_docs, list)
+            True
+            >>> neg_tokenized_docs = lda.get_tokenized_docs(example_docs, sentiment='negative')
+            >>> isinstance(neg_tokenized_docs, list)
+            True
+            >>> # Smart thermostats
+            >>> lda = LatentDirichletAllocation('thermos', product_type='smart')
             >>> example_docs = lda.data['review_text']
             >>> pos_tokenized_docs = lda.get_tokenized_docs(example_docs, sentiment='positive')
             >>> isinstance(pos_tokenized_docs, list)
@@ -688,6 +699,65 @@ class LatentDirichletAllocation(_Base):
 
         return results
 
+    def retrieve_original_text(self, corpus, id2word, texts):
+        # noinspection PyShadowingNames
+        """
+        Retrieve original review texts.
+
+        :param corpus: corpus (i.e. term-document frequency,
+            see `gensim.corpora.Dictionary.doc2bow()`_)
+        :type corpus: list
+        :param id2word: id-word mapping dictionary (see `gensim.corpora.Dictionary()`_)
+        :type id2word: gensim.corpora.Dictionary or list
+        :param texts: lemmatized review texts
+        :type texts: list
+        :return: Data of original review texts.
+        :rtype: pandas.DataFrame
+
+        .. _`gensim.corpora.Dictionary.doc2bow()`:
+            https://radimrehurek.com/gensim/corpora/dictionary.html#
+            gensim.corpora.dictionary.Dictionary.doc2bow
+        .. _`gensim.corpora.Dictionary()`:
+            https://radimrehurek.com/gensim/corpora/dictionary.html#
+            gensim.corpora.dictionary.Dictionary
+
+        **Examples**::
+
+            >>> from src.modeller import LatentDirichletAllocation
+            >>> lda = LatentDirichletAllocation(product_category='vacuum', product_type='robotic')
+            >>> sentiment = 'positive'
+            >>> tokenized_docs = lda.get_tokenized_docs(lda.data[lda.review_column_name], sentiment)
+            >>> eval_summary = lda.fetch_evaluation_summary(sentiment=sentiment)
+            >>> params_columns = [
+            ...     'min_count', 'threshold', 'num_topics', 'alpha', 'eta', 'corpus_proportion']
+            >>> min_count, threshold, num_topics, alpha, eta, corpus_prop = (
+            ...     eval_summary.loc[76, params_columns].values)
+            >>> corpus, prop, id2word, texts = lda._make_eval_corpus(
+            ...     sentiment=sentiment, tokenized_docs=tokenized_docs, corpus_prop=corpus_prop,
+            ...     min_count=min_count, threshold=threshold, ngram=3)
+            >>> original_texts = lda.retrieve_original_text(corpus, id2word, texts)
+            >>> original_texts.head()
+        """
+
+        original_text_tokens = [
+            sorted(set(id2word[token_id] for token_id, freq in doc)) for doc in corpus]
+
+        texts_ = [sorted(set(txt)) for txt in texts]
+
+        indices = [texts_.index(txt) for txt in original_text_tokens]
+
+        temp = self.data[
+            self.data['sentiment_on_dual_scale'] == self.sentiment].reset_index(drop=True)
+        docs = temp[['ReviewText', 'rating', 'vs_compound_score']].loc[indices]
+
+        vader = vaderSentiment.SentimentIntensityAnalyzer()
+        texts_0 = [vader.polarity_scores(' '.join(txt))['compound'] for txt in texts]
+
+        # noinspection PyArgumentList
+        docs['new_vs_compound_score'] = operator.itemgetter(*indices)(texts_0)
+
+        return docs.reset_index(drop=True)
+
     # == Evaluate models ===========================================================================
 
     @classmethod
@@ -696,7 +766,8 @@ class LatentDirichletAllocation(_Base):
         """
         Get a number of corpuses by specified proportions for model evaluation.
 
-        :param corpus: corpus (i.e. term-document frequency, see `gensim.corpora.Dictionary.doc2bow()`_)
+        :param corpus: corpus (i.e. term-document frequency,
+            see `gensim.corpora.Dictionary.doc2bow()`_)
         :type corpus: gensim.utils.ClippedCorpus or list
         :param proportions: proportions, defaults to ``None``
         :type proportions: typing.Iterable or None
@@ -803,7 +874,8 @@ class LatentDirichletAllocation(_Base):
             https://radimrehurek.com/gensim/corpora/dictionary.html#
             gensim.corpora.dictionary.Dictionary.doc2bow
         .. _`gensim.corpora.Dictionary()`:
-            https://radimrehurek.com/gensim/corpora/dictionary.html#gensim.corpora.dictionary.Dictionary
+            https://radimrehurek.com/gensim/corpora/dictionary.html#
+            gensim.corpora.dictionary.Dictionary
         .. _`gensim.models.LdaMulticore()`:
             https://radimrehurek.com/gensim/models/ldamulticore.html#
             gensim.models.ldamulticore.LdaMulticore
@@ -1420,8 +1492,7 @@ class LatentDirichletAllocation(_Base):
         if partially:
             data = data.query(' & '.join([f'`{k}` in {v}' for k, v in partially.items()]))
 
-        sns.set_theme(style='ticks')
-        sns.set(font_scale=1.4)
+        sns.set_theme(style='ticks', font_scale=1.4)
         mpl_preferences(font_size=16)
 
         g = sns.relplot(
@@ -1449,11 +1520,11 @@ class LatentDirichletAllocation(_Base):
             # ax.xaxis.grid(True)
             # ax.yaxis.grid(True)
 
-        for l_txt in g._legend.texts:
+        for l_txt in g.legend.texts:
             txt = l_txt.get_text()
             if txt in {'eta', 'alpha'}:
                 l_txt.set_text('\n' + txt + ': ')
-                l_txt.set_weight('bold')
+                l_txt.set_fontweight('bold')
                 l_txt.set_position((-50, -5))
 
         g.set_axis_labels(
@@ -1548,13 +1619,13 @@ class LatentDirichletAllocation(_Base):
             >>> # Robotic vacuum cleaners
             >>> lda = LatentDirichletAllocation('vacuum', product_type='robotic')
             >>> pos_top_topics_data = lda.get_topics(
-            ...     sentiment='positive', i=76, n_top_tokens=50, export=False)
+            ...     sentiment='positive', i=76, n_top_tokens=50, export_to_file=False)
             >>> isinstance(pos_top_topics_data, collections.OrderedDict)
             True
             >>> pos_top_topics_data[76].shape
             (50, 6)
             >>> neg_top_topics_data = lda.get_topics(
-            ...     sentiment='negative', i=[98, 123], n_top_tokens=50, export=False)
+            ...     sentiment='negative', i=[98, 123], n_top_tokens=50, export_to_file=False)
             >>> isinstance(neg_top_topics_data, collections.OrderedDict)
             True
             >>> list(neg_top_topics_data.keys())
@@ -2055,38 +2126,38 @@ class LatentDirichletAllocation(_Base):
         return original_reviews
 
 
-if __name__ == '__main__':
-    from src.modeller import LatentDirichletAllocation
-    from pyhelpers.settings import pd_preferences
-
-    pd_preferences()
-
-    lda = LatentDirichletAllocation('therms', product_type='smart')
-
-    pos_lda_eval_summary = lda.fetch_evaluation_summary(sentiment='positive')
-
-    neg_lda_eval_summary = lda.fetch_evaluation_summary(sentiment='negative')
-
-    if confirmed("To proceed?"):
-
-        # pos_lda_vis_data_1 = lda.get_vis_data(
-        #     sentiment='positive', i=0, export_to_html=True, verbose=True)
-        # pos_lda_vis_data_2 = lda.get_vis_data(
-        #     sentiment='positive', i=range(50), export_to_html=True, verbose=True)
-        pos_lda_vis_data_3 = lda.get_vis_data(
-            sentiment='positive', i=range(10), export_to_html=True, verbose=True,
-            ignore_auto_alpha=True)
-        pos_reviews = lda.find_original_reviews(
-            sentiment='positive', i=range(10), ignore_auto_alpha=True, export_to_file=True,
-            verbose=True)
-
-        # neg_lda_vis_data_1 = lda.get_vis_data(
-        #     sentiment='negative', i=0, export_to_html=True, verbose=True)
-        # neg_lda_vis_data_2 = lda.get_vis_data(
-        #     sentiment='negative', i=range(50), export_to_html=True, verbose=True)
-        neg_lda_vis_data_3 = lda.get_vis_data(
-            sentiment='negative', i=range(10), export_to_html=True, verbose=True,
-            ignore_auto_alpha=True)
-        neg_reviews = lda.find_original_reviews(
-            sentiment='negative', i=range(10), ignore_auto_alpha=True, export_to_file=True,
-            verbose=True)
+# if __name__ == '__main__':
+#     from src.modeller import LatentDirichletAllocation
+#     from pyhelpers.settings import pd_preferences
+#
+#     pd_preferences()
+#
+#     lda = LatentDirichletAllocation('therms', product_type='smart')
+#
+#     pos_lda_eval_summary = lda.fetch_evaluation_summary(sentiment='positive')
+#
+#     neg_lda_eval_summary = lda.fetch_evaluation_summary(sentiment='negative')
+#
+#     if confirmed("To proceed?"):
+#
+#         # pos_lda_vis_data_1 = lda.get_vis_data(
+#         #     sentiment='positive', i=0, export_to_html=True, verbose=True)
+#         # pos_lda_vis_data_2 = lda.get_vis_data(
+#         #     sentiment='positive', i=range(50), export_to_html=True, verbose=True)
+#         pos_lda_vis_data_3 = lda.get_vis_data(
+#             sentiment='positive', i=range(10), export_to_html=True, verbose=True,
+#             ignore_auto_alpha=True)
+#         pos_reviews = lda.find_original_reviews(
+#             sentiment='positive', i=range(10), ignore_auto_alpha=True, export_to_file=True,
+#             verbose=True)
+#
+#         # neg_lda_vis_data_1 = lda.get_vis_data(
+#         #     sentiment='negative', i=0, export_to_html=True, verbose=True)
+#         # neg_lda_vis_data_2 = lda.get_vis_data(
+#         #     sentiment='negative', i=range(50), export_to_html=True, verbose=True)
+#         neg_lda_vis_data_3 = lda.get_vis_data(
+#             sentiment='negative', i=range(10), export_to_html=True, verbose=True,
+#             ignore_auto_alpha=True)
+#         neg_reviews = lda.find_original_reviews(
+#             sentiment='negative', i=range(10), ignore_auto_alpha=True, export_to_file=True,
+#             verbose=True)
