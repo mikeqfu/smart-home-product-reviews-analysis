@@ -1,7 +1,7 @@
 Understanding user experience using text mining & analysis
 ==========================================================
 
-<span style="font-size: large; ">**A case study of Amazon.com reviews for smart-home products - Technical Documentation**</span>
+A case study of Amazon.com reviews for smart-home products - <span style="font-size: large; ">**Technical Documentation**</span>
 
 Authors: Qian Fu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-6502-9934), Yixiu Yu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-3481-0648), Dong Zhang [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-0993-207X)
 
@@ -69,8 +69,8 @@ Through topic modelling and fuzzy-set qualitative comparative analysis (fsQCA), 
             &ensp;
             <td align="center">
                 <a href="https://github.com/danbaidong" target="_blank"><img src="https://avatars.githubusercontent.com/u/4456514?v=4?s=100" width="100px;" alt="Dong Zhang"/><br><sub><b>Dong Zhang</b></sub></a><br>
-                <a href="https://orcid.org/0000-0002-0993-207X" target="_blank" title="Initiation">🌱</a>
-                <a title="Conceptualization & Methodology">💡</a>
+                <a title="Initiation">🌱</a>
+                <a href="https://orcid.org/0000-0002-0993-207X" target="_blank" title="Conceptualization & Methodology">💡</a>
                 <a href="https://github.com/mikeqfu/smart-home-product-reviews-analysis/tree/master/src/analyser" target="_blank" title="Validation, Formal analysis">📊</a>
                 <a href="https://doi.org/10.1080/08874417.2024.2408006" target="_blank" title="Writing - Review & Editing">📝</a>
             </td>
@@ -79,6 +79,6 @@ Through topic modelling and fuzzy-set qualitative comparative analysis (fsQCA), 
 </table>
 <br>
 
-<span style="font-size: small;font-weight:bold">**_Disclaimer_**</span>
+<span style="font-size: small;font-weight:bold">**_Disclaimer:_**</span>
 
 <em><span style="font-size: x-small; ">The data used in this study consists of anonymous reviews sourced from Amazon.com and is intended strictly for research purposes. All data has been processed and analyzed without personal identifiers to ensure the anonymity of the reviewers. Due to privacy and confidentiality agreements, we are not permitted to share any specific data or individual reviews included in our analysis. While the findings of this study are based on information gathered from these reviews, we acknowledge that individual opinions reflect the personal experiences of customers. Therefore, we cannot guarantee the reliability or validity of the content within the reviews. All data usage complies with Amazon's terms of service and privacy policies. The authors of this research and the collaborators of this repository have no affiliation with Amazon.com and do not receive any financial support or benefits from the platform.</span></em>
