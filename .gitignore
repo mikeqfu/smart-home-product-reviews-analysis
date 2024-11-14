@@ -21,6 +21,7 @@ Makefile
 **/html/
 **/latex/*
 !**/smart_home_product_reviews_analysis.pdf
+!**/text_mining_framework.*
 
 # Project-specific
 .credentials
