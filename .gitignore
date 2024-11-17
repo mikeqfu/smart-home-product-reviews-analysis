@@ -21,11 +21,13 @@ Makefile
 **/html/
 **/latex/*
 !**/smart_home_product_reviews_analysis.pdf
-!**/text_mining_framework.*
+!*/_images/methodology/text_mining_framework.*
 
 # Project-specific
 .credentials
 *[!_]_.py
 data/*
+!**/thermostats/smart/stats/*
+!*/.gitkeep
 files/*
 cmd.md
