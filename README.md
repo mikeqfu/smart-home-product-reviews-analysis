@@ -3,7 +3,7 @@ Understanding user experience using text mining & analysis
 
 A case study of Amazon.com reviews for smart-home products - <span style="font-size: large; ">**[Technical Documentation](https://github.com/mikeqfu/smart-home-product-reviews-analysis/blob/master/docs/build/latex/smart_home_product_reviews_analysis.pdf)**</span>
 
-Authors: Qian Fu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-6502-9934), Yixiu Yu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-3481-0648), Dong Zhang [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-0993-207X)
+Qian Fu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-6502-9934), Yixiu Yu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-3481-0648), Dong Zhang [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-0993-207X)
 
 
 ## Introduction
@@ -63,7 +63,7 @@ Through topic modelling and fuzzy-set qualitative comparative analysis (fsQCA), 
                 <a href="https://orcid.org/0000-0002-3481-0648" target="_blank" title="Conceptualization & Methodology">💡</a>
                 <a href="https://github.com/mikeqfu/smart-home-product-reviews-analysis/tree/master/demos" title="Resources, Data Curation">📦</a>
                 <a href="https://github.com/mikeqfu/smart-home-product-reviews-analysis/tree/master/src/modeller" target="_blank" title="Investigation">🔍</a>
-                <a href="https://github.com/mikeqfu/smart-home-product-reviews-analysis/tree/master/src/analyser" target="_blank" title="Validation, Formal analysis">📊</a>
+                <a href="https://github.com/mikeqfu/smart-home-product-reviews-analysis/tree/master/src/analyser" target="_blank" title="Software, Validation, Formal analysis">📊</a>
                 <a href="https://doi.org/10.1080/08874417.2024.2408006" target="_blank" title="Writing - Original Draft, Writing - Review & Editing">📝</a>
             </td>
             &ensp;
@@ -71,7 +71,7 @@ Through topic modelling and fuzzy-set qualitative comparative analysis (fsQCA), 
                 <a href="https://github.com/danbaidong" target="_blank"><img src="https://avatars.githubusercontent.com/u/4456514?v=4?s=100" width="100px;" alt="Dong Zhang"/><br><sub><b>Dong Zhang</b></sub></a><br>
                 <a title="Initiation">🌱</a>
                 <a href="https://orcid.org/0000-0002-0993-207X" target="_blank" title="Conceptualization & Methodology">💡</a>
-                <a href="https://github.com/mikeqfu/smart-home-product-reviews-analysis/tree/master/src/analyser" target="_blank" title="Validation, Formal analysis">📊</a>
+                <a href="https://github.com/mikeqfu/smart-home-product-reviews-analysis/tree/master/src/analyser" target="_blank" title="Software, Validation, Formal analysis">📊</a>
                 <a href="https://doi.org/10.1080/08874417.2024.2408006" target="_blank" title="Writing - Review & Editing">📝</a>
             </td>
         </tr>
