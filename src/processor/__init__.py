@@ -1,5 +1,5 @@
 """
-The module is used for (pre-)processing (and I/O management of) all the data resources.
+The module is used to (pre-)process and I/O management of all the data resources.
 """
 
 from ._amazon import _Reviews

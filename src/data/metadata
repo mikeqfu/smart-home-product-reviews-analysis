@@ -1,29 +1,28 @@
 {
-    "Project": "Text mining & analysis: A case study of robotic vacuum reviews on Amazon.com",
-    "Package": "",
-    "Description": "",
-    "Authors": {
-        "Team Member 1": {
+    "Project": "Understanding user experience using text mining & analysis",
+    "Description": "A case study of Amazon.com reviews for smart-home products",
+    "Collaborators": {
+        "Collaborator 1": {
             "Name": "Qian Fu",
             "Department": "School of Engineering",
-            "Institution": "University of Birmingham",
+            "Institution": "University of Birmingham, UK",
             "Email": "q.fu@bham.ac.uk"
         },
-        "Team Member 2": {
+        "Collaborator 2": {
             "Name": "Yixiu Yu",
             "Department": "Miller College of Business",
-            "Institution": "Ball State University",
+            "Institution": "Ball State University, USA",
             "Email": "yyu4@bsu.edu"
         },
-        "Team Member 3": {
+        "Collaborator 3": {
             "Name": "Dong Zhang",
-            "Department": "School of Transportation and Logistics",
-            "Institution": "Dalian University of Technology",
+            "Department": "School of Maritime Economics and Management",
+            "Institution": "Dalian Maritime University, China",
             "Email": "zhangdong@dlut.edu.cn"
         }
     },
-    "Version": "0.0.1",
-    "License": "GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Version": "1.0.0",
+    "License": "MIT License",
     "Project Start": "January 2022",
-    "Project End": ""
+    "Project End": "October 2024"
 }
