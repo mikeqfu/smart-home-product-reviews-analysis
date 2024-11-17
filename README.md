@@ -1,7 +1,10 @@
 Understanding user experience using text mining & analysis
 ==========================================================
 
-A case study of Amazon.com reviews for smart-home products - <span style="font-size: large; ">**[Technical Documentation](https://github.com/mikeqfu/smart-home-product-reviews-analysis/blob/master/docs/build/latex/smart_home_product_reviews_analysis.pdf)**</span>
+<span style="font-size: large; ">A case study of Amazon.com reviews for smart-home products - **[Technical Documentation](https://github.com/mikeqfu/smart-home-product-reviews-analysis/blob/master/docs/build/latex/smart_home_product_reviews_analysis.pdf)**</span>
+
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-31011/)
+![GitHub License](https://img.shields.io/github/license/mikeqfu/smart-home-product-reviews-analysis)
 
 Qian Fu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-6502-9934), Yixiu Yu [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-3481-0648), Dong Zhang [![](https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png)](https://orcid.org/0000-0002-0993-207X)
 
