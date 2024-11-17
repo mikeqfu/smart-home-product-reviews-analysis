@@ -1,5 +1,5 @@
 """
-The module is used for applying algorithms on the data generated from :mod:`~src.processor`.
+The module is used to apply algorithms on the data generated from :mod:`~src.processor`.
 """
 
 import warnings
